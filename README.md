@@ -41,7 +41,7 @@ You can pass 4 args
 ### How it will work?
 When you will run the command that time `chromium` browser will be open in background & visit the link & perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
 
-**Note: It will use huge CPU to process chrome & ffmpeg.** 
+**Note: It will use extra CPU to process chrome & ffmpeg.** 
 
 
 
