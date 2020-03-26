@@ -41,19 +41,25 @@ async function main() {
         
         const page = pages[0]
 
-        page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+        page.on('console', msg => {
+            var m = msg.text();
+            console.log('PAGE LOG:', m)
+        });
 
         await page._client.send('Emulation.clearDeviceMetricsOverride')
         await page.goto(url, {waitUntil: 'networkidle2'})
         await page.setBypassCSP(true)
 
-        await page.click('button[class=acorn-play-button]', {waitUntil: 'domcontentloaded'});
+        await page.waitForSelector('button[class=acorn-play-button]');
         await page.$eval('#navbar', element => element.parentNode.removeChild(element));
         await page.$eval('.acorn-controls', element => element.parentNode.removeChild(element));
         await page.$eval('#copyright', element => element.parentNode.removeChild(element));
-        
-        //const form = await page.$('.acorn-play-button');
-        //await form.evaluate( form => form.click() );
+        await page.click('video[id=video]', {waitUntil: 'domcontentloaded'});
+
+        await page.evaluate((x) => {
+            console.log("REC_START");
+            window.postMessage({type: 'REC_START'}, '*')
+        })
 
         // Perform any actions that have to be captured in the exported video
         await page.waitFor((duration * 1000))

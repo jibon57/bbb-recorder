@@ -13,6 +13,9 @@ chrome.runtime.onConnect.addListener(port => {
       case 'REC_STOP':
         recorder.stop()    
         break
+      case 'REC_START':
+        recorder.start();
+        break
       case 'REC_CLIENT_PLAY':
         if(recorder){
           return
@@ -70,9 +73,7 @@ chrome.runtime.onConnect.addListener(port => {
               }, ()=>{
               });
             }
-            setTimeout(function(){
-              recorder.start();
-            }, 3000)
+
           }, error => console.log('Unable to get user media', error))
         })
         break
