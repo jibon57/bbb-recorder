@@ -3,6 +3,7 @@
 Bigbluebutton recordings to `webm` or `mp4`. This is an example how I have implemented BBB recordings to distibutable file. 
 
 
+
 1. Videos will be copied to `/var/www/bigbluebutton-default/record`
 3. Can converted to `mp4`. Default `webm`
 2. Specify bitrate to control quality of the exported video by adjusting `videoBitsPerSecond` property in `background.js`
@@ -37,6 +38,14 @@ You can pass 4 args
 2) Export file name. Should be `.webm` at end
 3) Duration of recording in seconds. Default 10 seconds
 4) Convert to mp4 or not (true for convert to mp4). Default false
+
+
+You can also use `liveJoin.js` to live join meeting as a recorder & perform recording like this:
+
+```sh
+node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 10 true
+```
+
 
 ### How it will work?
 When you will run the command that time `chromium` browser will be open in background & visit the link & perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
