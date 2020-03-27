@@ -115,7 +115,7 @@ function convertAndCopy(filename){
     console.log(copyTo);
     console.log(copyFrom);
 
-    var cmd = "ffmpeg -y -i '" + copyFrom + "' -preset veryfast -movflags faststart -profile:v high -level 4.2 '" + copyTo + "'";
+    var cmd = "ffmpeg -y -i '" + copyFrom + "' -preset veryfast -movflags faststart -profile:v high -level 4.2 -max_muxing_queue_size 9999 -vf mpdecimate -vsync vfr '" + copyTo + "'";
 
     console.log("converting using: " + cmd);
     
