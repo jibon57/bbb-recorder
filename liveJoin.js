@@ -25,7 +25,7 @@ var options     = {
 
 async function main() {
     try{
-        //xvfb.startSync()
+        xvfb.startSync()
         var url = process.argv[2],
             exportname = process.argv[3], 
             duration = process.argv[4],
@@ -84,7 +84,7 @@ async function main() {
         await page.waitForSelector('html.downloadComplete', {timeout: 0})
         await page.close()
         await browser.close()
-        //xvfb.stopSync()
+        xvfb.stopSync()
 
         if(convert){
             convertAndCopy(exportname)
