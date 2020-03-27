@@ -25,7 +25,7 @@ var options     = {
 
 async function main() {
     try{
-        xvfb.startSync()
+        //xvfb.startSync()
         var url = process.argv[2],
             exportname = process.argv[3], 
             duration = process.argv[4],
@@ -33,7 +33,7 @@ async function main() {
 
         if(!url){ url = 'http://tobiasahlin.com/spinkit/' }
         if(!exportname){ exportname = 'spinner.webm' }
-        if(!duration){ duration = 10 }
+        //if(!duration){ duration = 10 }
         if(!convert){ convert = false }
         
         const browser = await puppeteer.launch(options)
@@ -56,18 +56,24 @@ async function main() {
         await page.waitForSelector('[id="chat-toggle-button"]');
         await page.click('[id="chat-toggle-button"]', {waitUntil: 'domcontentloaded'});
         await page.click('button[aria-label="Users and messages toggle"]', {waitUntil: 'domcontentloaded'});
+        await page.$eval('[class^=navbar]', element => element.style.display = "none");
 
-        await page.$eval('.Toastify', element => element.parentNode.removeChild(element));
+        await page.$eval('.Toastify', element => element.style.display = "none");
         await page.waitForSelector('button[aria-label="Leave audio"]');
-        await page.$eval('[class^=actionsbar] > [class^=center]', element => element.parentNode.removeChild(element));
+        await page.$eval('[class^=actionsbar] > [class^=center]', element => element.style.display = "none");
         
         await page.evaluate((x) => {
             console.log("REC_START");
             window.postMessage({type: 'REC_START'}, '*')
         })
 
-        // Perform any actions that have to be captured in the exported video
-        await page.waitFor((duration * 1000))
+        if(duration){
+            await page.waitFor((duration * 1000))
+        }else{
+            await page.waitForSelector('[class^=modal] > [class^=content] > button[description="Logs you out of the meeting"]', {
+                timeout: 0
+            });
+        }
 
         await page.evaluate(filename=>{
             window.postMessage({type: 'SET_EXPORT_PATH', filename: filename}, '*')
@@ -78,7 +84,7 @@ async function main() {
         await page.waitForSelector('html.downloadComplete', {timeout: 0})
         await page.close()
         await browser.close()
-        xvfb.stopSync()
+        //xvfb.stopSync()
 
         if(convert){
             convertAndCopy(exportname)

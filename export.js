@@ -51,9 +51,9 @@ async function main() {
         await page.setBypassCSP(true)
 
         await page.waitForSelector('button[class=acorn-play-button]');
-        await page.$eval('#navbar', element => element.parentNode.removeChild(element));
-        await page.$eval('.acorn-controls', element => element.parentNode.removeChild(element));
-        await page.$eval('#copyright', element => element.parentNode.removeChild(element));
+        await page.$eval('#navbar', element => element.style.display = "none");
+        await page.$eval('#copyright', element => element.style.display = "none");
+        await page.$eval('.acorn-controls', element => element.style.display = "none");
         await page.click('video[id=video]', {waitUntil: 'domcontentloaded'});
 
         await page.evaluate((x) => {
