@@ -67,7 +67,7 @@ async function main() {
             window.postMessage({type: 'REC_START'}, '*')
         })
 
-        if(duration){
+        if(duration > 0){
             await page.waitFor((duration * 1000))
         }else{
             await page.waitForSelector('[class^=modal] > [class^=content] > button[description="Logs you out of the meeting"]', {
