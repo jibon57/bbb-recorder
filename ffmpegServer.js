@@ -44,6 +44,7 @@ wss.on('connection', function connection(ws, req) {
 	    '-f', 'flv',
 
 	    '-max_muxing_queue_size', '99999',
+	    '-preset', 'veryfast',
 
 	    //'-vf', 'mpdecimate', '-vsync', 'vfr',
 	    //'-vf', 'mpdecimate,setpts=N/FRAME_RATE/TB',
