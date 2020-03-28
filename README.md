@@ -46,6 +46,26 @@ You can also use `liveJoin.js` to live join meeting as a recorder & perform reco
 node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 10 true
 ```
 
+**Live RTMP broadcasting.(Experimental)**
+
+Sometime you may want to broadcast meeting via RTMP. I did some experiment on it & got success but not 100%. To test you can use `ffmpegServer.js` to run websocket server & `liveRTMP.js` to join the meeting. You'll have to edit `rtmpUrl` from `ffmpegServer.js` & port (if need). Then add websocket value as `ffmpegServer` in `liveRTMP.js` file.
+
+1) Frist run websocket server by `node ffmpegServer.js`
+2) Then in another terminal tab
+
+```sh
+node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...."
+```
+You can also set duration like this too otherwise it will close after meeting end or kickout:
+
+```sh
+node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." 20
+```
+
+Check the process of websocket server, `ffmpeg` should start sending data to RTMP server.
+
+**Note:**
+If you do nothing in meeting room that time `ffmpeg` may exit with error. Actually I don't have much experience on `ffmpeg` to resolve those problems. Please contribute your experience.
 
 ### How it will work?
 When you will run the command that time `chromium` browser will be open in background & visit the link & perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
@@ -53,9 +73,13 @@ When you will run the command that time `chromium` browser will be open in backg
 **Note: It will use extra CPU to process chrome & ffmpeg.** 
 
 
-
-Thanks to [@muralikg](https://github.com/muralikg/puppetcam). Everything was copied from there & I did some adjustment. 
-
-
 ### Looking for Bigbluebutton shared hosting?
+
 We are offering cheaper [Bigbluebutton shared hosting](https://www.mynaparrot.com/classroom) or Bigbluebutton insallation/configuration service. You can send me email jibon[@]mynaparrot.com
+
+
+### Thanks to
+
+[puppetcam](https://github.com/muralikg/puppetcam). Most of the parts were copied from there. 
+
+[Canvas-Streaming-Example](https://github.com/fbsamples/Canvas-Streaming-Example)

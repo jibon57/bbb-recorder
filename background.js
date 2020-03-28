@@ -2,6 +2,8 @@
 
 let recorder = null;
 let filename = null;
+let ws;
+let liveSteam = false;
 chrome.runtime.onConnect.addListener(port => {
 
   port.onMessage.addListener(msg => {
@@ -10,11 +12,20 @@ chrome.runtime.onConnect.addListener(port => {
       case 'SET_EXPORT_PATH':
         filename = msg.filename
         break
+      case 'FFMPEG_SERVER':
+        let ffmpegServer = msg.ffmpegServer
+        ws = new WebSocket(ffmpegServer);
+        liveSteam = true;
+        break
       case 'REC_STOP':
         recorder.stop()    
         break
       case 'REC_START':
-        recorder.start();
+        if(liveSteam){
+          recorder.start(1000);
+        }else{
+          recorder.start();
+        }
         break
       case 'REC_CLIENT_PLAY':
         if(recorder){
@@ -42,7 +53,7 @@ chrome.runtime.onConnect.addListener(port => {
               }
             }
           }, stream => {
-            var chunks=[];
+            var chunks = [];
             recorder = new MediaRecorder(stream, {
                 videoBitsPerSecond: 2500000,
                 ignoreMutedMedia: true,
@@ -51,10 +62,17 @@ chrome.runtime.onConnect.addListener(port => {
             recorder.ondataavailable = function (event) {
                 if (event.data.size > 0) {
                     chunks.push(event.data);
+                    if(liveSteam){
+                      ws.send(event.data);
+                    }
                 }
             };
 
             recorder.onstop = function () {
+                if(liveSteam){
+                  ws.close();
+                }
+
                 var superBuffer = new Blob(chunks, {
                     type: 'video/webm'
                 });
