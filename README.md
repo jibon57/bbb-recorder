@@ -54,12 +54,12 @@ Sometime you may want to broadcast meeting via RTMP. I did some experiment on it
 2) Then in another terminal tab
 
 ```sh
-node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...."
+node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...."
 ```
 You can also set duration like this too otherwise it will close after meeting end or kickout:
 
 ```sh
-node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." 20
+node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." 20
 ```
 
 Check the process of websocket server, `ffmpeg` should start sending data to RTMP server.
