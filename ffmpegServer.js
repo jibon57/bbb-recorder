@@ -1,8 +1,11 @@
 const child_process = require('child_process');
 const WebSocketServer = require('ws').Server;
 const http = require('http');
+const fs = require('fs');
 
-const server = http.createServer().listen(4000, () => {
+var config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
+
+const server = http.createServer().listen(config.ffmpegServerPort, () => {
   console.log('Listening...');
 });
 
@@ -11,7 +14,7 @@ const wss = new WebSocketServer({
 });
 
 
-const rtmpUrl = "rtmp://a.rtmp.youtube.com/live2/MyKey";
+const rtmpUrl = config.rtmpUrl;
 
 wss.on('connection', function connection(ws, req) {
 	console.log('connection');
@@ -23,7 +26,7 @@ wss.on('connection', function connection(ws, req) {
 		return;
 	}
 
-	if(auth[1] !== "mZFZN4yc"){
+	if(auth[1] !== config.auth){
 		ws.terminate();
 		return;
 	}

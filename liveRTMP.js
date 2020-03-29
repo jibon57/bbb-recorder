@@ -2,8 +2,10 @@ const puppeteer = require('puppeteer');
 const Xvfb      = require('xvfb');
 var exec = require('child_process').exec;
 const fs = require('fs');
+var config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
 const homedir = require('os').homedir();
-const ffmpegServer = "ws://localhost:4000/auth/mZFZN4yc";
+
+const ffmpegServer = config.ffmpegServer + ":" + config.ffmpegServerPort + "/auth/" + config.auth;
 
 var xvfb        = new Xvfb({silent: true});
 var width       = 1280;
