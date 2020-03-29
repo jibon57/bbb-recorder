@@ -1,5 +1,5 @@
 {
-	"rtmpUrl": "rtmp://a.rtmp.youtube.com/live2/MyKey",
+	"rtmpUrl": "rtmp://127.0.0.1/live/sallar",
 	"ffmpegServer": "ws://localhost",
 	"ffmpegServerPort": 4000,
 	"auth": "mZFZN4yc"
