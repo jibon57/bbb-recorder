@@ -48,7 +48,8 @@ node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID..
 
 **Live RTMP broadcasting.(Experimental)**
 
-Sometime you may want to broadcast meeting via RTMP. I did some experiment on it & got success but not 100%. To test you can use `ffmpegServer.js` to run websocket server & `liveRTMP.js` to join the meeting. You'll have to edit `rtmpUrl` from `ffmpegServer.js` & port (if need). Then add websocket value as `ffmpegServer` in `liveRTMP.js` file.
+Sometime you may want to broadcast meeting via RTMP. I did some experiment on it & got success but not 100%. To test you can use `ffmpegServer.js` to run websocket server & `liveRTMP.js` to join the meeting. You'll have to edit `rtmpUrl` & `ffmpegServer` info inside `config.json` file (if need). 
+
 
 1) Frist run websocket server by `node ffmpegServer.js`
 2) Then in another terminal tab
