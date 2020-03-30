@@ -12,8 +12,8 @@
     "screencast"
   ],
   "dependencies": {
-    "puppeteer": "2.0.0",
-    "xvfb": "^0.2.3",
+    "puppeteer": "^2.1.1",
+    "xvfb": "^0.3.0",
     "ws": "^7.2.3"
   }
 }

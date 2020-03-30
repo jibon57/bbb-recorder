@@ -4,7 +4,10 @@ var exec = require('child_process').exec;
 const fs = require('fs');
 const homedir = require('os').homedir();
 
-var xvfb        = new Xvfb({silent: true});
+var xvfb        = new Xvfb({
+    silent: true,
+    xvfb_args: ["-screen", "0", "1280x800x24", "-ac", "-nolisten", "tcp", "-dpi", "96", "+extension", "RANDR"]
+});
 var width       = 1280;
 var height      = 720;
 var options     = {
