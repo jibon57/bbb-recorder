@@ -22,13 +22,13 @@ cd bbb-recorder
 npm install
 ```
 
-**Recording export:**
+### Recording export
 
 ```sh
 node export.js "https://BBB_HOST/playback/presentation/2.0/playback.html?meetingId=MEETING_ID" meeting.webm 10 true
 ```
 
-### Options
+**Options**
 
 You can pass 4 args
 
@@ -38,7 +38,7 @@ You can pass 4 args
 4) Convert to mp4 or not (true for convert to mp4). Default false
 
 
-**Live recording:**
+### Live recording
 
 You can also use `liveJoin.js` to live join meeting as a recorder & perform recording like this:
 
@@ -51,7 +51,7 @@ Here `0` mean no limit. Recording will auto stop after meeting end or kickout of
 node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 60 true
 ```
 
-**Live RTMP broadcasting (Experimental)**
+## Live RTMP broadcasting (Experimental)
 
 Sometime you may want to broadcast meeting via RTMP. I did some experiment on it & got success but not 100%. To test you can use `ffmpegServer.js` to run websocket server & `liveRTMP.js` to join the meeting. You'll have to edit `rtmpUrl` & `ffmpegServer` info inside `config.json` file (if need). 
 
