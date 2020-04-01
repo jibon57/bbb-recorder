@@ -10,7 +10,17 @@ Bigbluebutton recordings export to `webm` or `mp4` & live broadcasting. This is 
 ### Dependencies
 
 1. xvfb (`apt install xvfb`)
-2. npm modules listed in package.json
+2. Google Chrome stable
+3. npm modules listed in package.json
+
+The latest Google Chrome stable build should be used.
+
+```sh
+curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+apt-get -y update
+apt-get -y install google-chrome-stable
+```
 
 ### Usage
 
@@ -71,10 +81,10 @@ node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID..
 Check the process of websocket server, `ffmpeg` should start sending data to RTMP server.
 
 **Note:**
-If you do nothing in meeting room that time `ffmpeg` may exit with error. Actually I don't have much experience on `ffmpeg` to resolve those problems. Please contribute your experience.
+If you do nothing in meeting room that time `ffmpeg` may exit with error & will try to reconnect again. Actually I don't have much experience on `ffmpeg` to resolve those problems. Please contribute your experience.
 
 ### How it will work?
-When you will run the command that time `chromium` browser will be open in background & visit the link & perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
+When you will run the command that time `Chrome` browser will be open in background & visit the link & perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
 
 **Note: It will use extra CPU to process chrome & ffmpeg.** 
 

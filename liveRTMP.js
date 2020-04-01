@@ -3,7 +3,9 @@ const Xvfb      = require('xvfb');
 var exec = require('child_process').exec;
 const fs = require('fs');
 var config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
-const homedir = require('os').homedir();
+const os = require('os');
+const homedir = os.homedir();
+const platform = os.platform();
 
 const ffmpegServer = config.ffmpegServer + ":" + config.ffmpegServerPort + "/auth/" + config.auth;
 
@@ -28,15 +30,22 @@ var options     = {
     `--window-size=${width},${height}`,
   ],
 }
+if(platform == "linux"){
+    options.executablePath = "/usr/bin/google-chrome"
+}else if(platform == "darwin"){
+    options.executablePath = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+}
 
 async function main() {
     try{
-        xvfb.startSync()
+        if(platform == "linux"){
+            xvfb.startSync()
+        }
         var url = process.argv[2],
             duration = process.argv[3], 
             exportname = 'liveMeeting.webm'
 
-        if(!url){ url = 'http://tobiasahlin.com/spinkit/' }
+        if(!url){ url = 'https://www.mynaparrot.com/' }
         //if(!duration){ duration = 10 }
         
         const browser = await puppeteer.launch(options)
@@ -92,8 +101,11 @@ async function main() {
         await page.waitForSelector('html.downloadComplete', {timeout: 0})
         await page.close()
         await browser.close()
-        xvfb.stopSync()
 
+        if(platform == "linux"){
+            xvfb.stopSync()
+        }
+        
         fs.unlinkSync(homedir + "/Downloads/liveMeeting.webm");
         
     }catch(err) {

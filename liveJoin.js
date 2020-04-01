@@ -2,7 +2,9 @@ const puppeteer = require('puppeteer');
 const Xvfb      = require('xvfb');
 var exec = require('child_process').exec;
 const fs = require('fs');
-const homedir = require('os').homedir();
+const os = require('os');
+const homedir = os.homedir();
+const platform = os.platform();
 
 var xvfb        = new Xvfb({
     silent: true,
@@ -26,16 +28,24 @@ var options     = {
   ],
 }
 
+if(platform == "linux"){
+    options.executablePath = "/usr/bin/google-chrome"
+}else if(platform == "darwin"){
+    options.executablePath = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+}
+
 async function main() {
     try{
-        xvfb.startSync()
+        if(platform == "linux"){
+            xvfb.startSync()
+        }
         var url = process.argv[2],
             exportname = process.argv[3], 
             duration = process.argv[4],
             convert = process.argv[5]
 
-        if(!url){ url = 'http://tobiasahlin.com/spinkit/' }
-        if(!exportname){ exportname = 'spinner.webm' }
+        if(!url){ url = 'https://www.mynaparrot.com/' }
+        if(!exportname){ exportname = 'live.webm' }
         //if(!duration){ duration = 10 }
         if(!convert){ convert = false }
         
@@ -87,7 +97,10 @@ async function main() {
         await page.waitForSelector('html.downloadComplete', {timeout: 0})
         await page.close()
         await browser.close()
-        xvfb.stopSync()
+
+        if(platform == "linux"){
+            xvfb.stopSync()
+        }
 
         if(convert){
             convertAndCopy(exportname)
@@ -118,7 +131,7 @@ function convertAndCopy(filename){
     console.log(copyTo);
     console.log(copyFrom);
 
-    var cmd = "ffmpeg -y -i '" + copyFrom + "' -preset veryfast -movflags faststart -profile:v high -level 4.2 -max_muxing_queue_size 9999 -vf mpdecimate -vsync vfr '" + copyTo + "'";
+    var cmd = "ffmpeg -y -i '" + copyFrom + "' -c:v libx264 -preset veryfast -movflags faststart -profile:v high -level 4.2 -max_muxing_queue_size 9999 -vf mpdecimate -vsync vfr '" + copyTo + "'";
 
     console.log("converting using: " + cmd);
     

@@ -36,22 +36,22 @@ wss.on('connection', function connection(ws, req) {
 		// FFmpeg will read input video from STDIN
     	'-i', '-',
 
-    	// Chromium doesn't support H.264, set the video codec to 'libx264'
-	    // or similar to transcode it to H.264 here on the server.
-	    '-vcodec', 'libx264',
+    	// If we're encoding H.264 in-browser, we can set the video codec to 'copy'
+    	// so that we don't waste any CPU and quality with unnecessary transcoding.
+	    '-vcodec', 'copy',
 
 	    //No browser currently supports encoding AAC, so we must transcode the audio to AAC here on the server.
 	    '-acodec', 'aac',
 	    
-	    // FLV is the container format used in conjunction with RTMP
-	    '-f', 'flv',
-
 	    '-max_muxing_queue_size', '99999',
 	    '-preset', 'veryfast',
 
 	    //'-vf', 'mpdecimate', '-vsync', 'vfr',
 	    //'-vf', 'mpdecimate,setpts=N/FRAME_RATE/TB',
-	    
+
+	    // FLV is the container format used in conjunction with RTMP
+	    '-f', 'flv',
+
 	    // The output RTMP URL.
 	    // For debugging, you could set this to a filename like 'test.flv', and play
 	    // the resulting file with VLC.
@@ -61,6 +61,8 @@ wss.on('connection', function connection(ws, req) {
 	// If FFmpeg stops for any reason, close the WebSocket connection.
 	ffmpeg.on('close', (code, signal) => {
 		console.log('FFmpeg child process closed, code ' + code + ', signal ' + signal);
+		//console.log("reconnecting...")
+		ws.send("ffmpegClosed")
 		ws.terminate();
 	});
 

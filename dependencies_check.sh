@@ -37,7 +37,8 @@ libappindicator1
 libnss3
 lsb-release
 xdg-utils
-wget"
+wget
+xvfb"
 
 declare -a neededPackages
 
