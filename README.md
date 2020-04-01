@@ -1,18 +1,16 @@
 # bbb-recorder
 
-Bigbluebutton recordings to `webm` or `mp4`. This is an example how I have implemented BBB recordings to distibutable file. 
+Bigbluebutton recordings export to `webm` or `mp4` & live broadcasting. This is an example how I have implemented BBB recordings to distibutable file. 
 
-
-
-1. Videos will be copied to `/var/www/bigbluebutton-default/record`
-3. Can converted to `mp4`. Default `webm`
+1. Videos will be copy to `/var/www/bigbluebutton-default/record`
+3. Can be converted to `mp4`. Default `webm`
 2. Specify bitrate to control quality of the exported video by adjusting `videoBitsPerSecond` property in `background.js`
 
 
 ### Dependencies
 
 1. xvfb (`apt install xvfb`)
-2. npm modules listed in package.json (`npm install`)
+2. npm modules listed in package.json
 
 ### Usage
 
@@ -24,7 +22,7 @@ cd bbb-recorder
 npm install
 ```
 
-Now run:
+**Recording export:**
 
 ```sh
 node export.js "https://BBB_HOST/playback/presentation/2.0/playback.html?meetingId=MEETING_ID" meeting.webm 10 true
@@ -40,24 +38,31 @@ You can pass 4 args
 4) Convert to mp4 or not (true for convert to mp4). Default false
 
 
+**Live recording:**
+
 You can also use `liveJoin.js` to live join meeting as a recorder & perform recording like this:
 
 ```sh
-node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 10 true
+node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 0 true
+```
+Here `0` mean no limit. Recording will auto stop after meeting end or kickout of recorder user. You can also set time limit like this:
+
+```sh
+node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 60 true
 ```
 
-**Live RTMP broadcasting.(Experimental)**
+**Live RTMP broadcasting (Experimental)**
 
 Sometime you may want to broadcast meeting via RTMP. I did some experiment on it & got success but not 100%. To test you can use `ffmpegServer.js` to run websocket server & `liveRTMP.js` to join the meeting. You'll have to edit `rtmpUrl` & `ffmpegServer` info inside `config.json` file (if need). 
 
 
-1) Frist run websocket server by `node ffmpegServer.js`
+1) First run websocket server by `node ffmpegServer.js`
 2) Then in another terminal tab
 
 ```sh
 node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...."
 ```
-You can also set duration like this too otherwise it will close after meeting end or kickout:
+You can also set duration otherwise it will close after meeting end or kickout:
 
 ```sh
 node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." 20
