@@ -12,8 +12,9 @@ Bigbluebutton recordings export to `webm` or `mp4` & live broadcasting. This is 
 1. xvfb (`apt install xvfb`)
 2. Google Chrome stable
 3. npm modules listed in package.json
+4. Everything inside `dependencies_check.sh` (run `./dependencies_check.sh` to install all)
 
-The latest Google Chrome stable build should be used.
+The latest Google Chrome stable build should be use.
 
 ```sh
 curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
@@ -91,7 +92,7 @@ When you will run the command that time `Chrome` browser will be open in backgro
 
 ## Looking for Bigbluebutton shared hosting?
 
-We are offering cheaper [Bigbluebutton shared hosting](https://www.mynaparrot.com/classroom) or Bigbluebutton insallation/configuration service. You can send me email jibon[@]mynaparrot.com
+We are offering cheaper [Bigbluebutton shared hosting](https://www.mynaparrot.com/classroom) or Bigbluebutton installation/configuration/loadbalance service. You can send me email jibon[@]mynaparrot.com
 
 
 ### Thanks to
