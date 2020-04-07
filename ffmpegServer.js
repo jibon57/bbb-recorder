@@ -40,10 +40,20 @@ wss.on('connection', function connection(ws, req) {
     	// so that we don't waste any CPU and quality with unnecessary transcoding.
 	    '-vcodec', 'copy',
 
+	    // use if you need for smooth youtube publishing. Note: will use more CPU
+	    //'-vcodec', 'libx264',
+	    //'-x264-params', 'keyint=120:scenecut=0',
+
 	    //No browser currently supports encoding AAC, so we must transcode the audio to AAC here on the server.
 	    '-acodec', 'aac',
+
+	    // remove background noise. You can adjust this values according to your need
+	    '-af', 'highpass=f=200, lowpass=f=3000',
 	    
+	    // This option sets the size of this buffer, in packets, for the matching output stream
 	    '-max_muxing_queue_size', '99999',
+
+	    // better to use veryfast or fast
 	    '-preset', 'veryfast',
 
 	    //'-vf', 'mpdecimate', '-vsync', 'vfr',

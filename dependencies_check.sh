@@ -38,7 +38,8 @@ libnss3
 lsb-release
 xdg-utils
 wget
-xvfb"
+xvfb
+fonts-noto"
 
 declare -a neededPackages
 
