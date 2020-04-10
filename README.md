@@ -30,7 +30,7 @@ Clone the project first:
 ```javascript
 git clone https://github.com/jibon57/bbb-recorder
 cd bbb-recorder
-npm install
+npm install --ignore-scripts
 ```
 
 ### Recording export
