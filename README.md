@@ -23,6 +23,13 @@ apt-get -y update
 apt-get -y install google-chrome-stable
 ```
 
+FFmpeg (if not installed already & have plan for mp4 or RTMP)
+```sh
+sudo add-apt-repository ppa:jonathonf/ffmpeg-4
+sudo apt-get update
+sudo apt-get install ffmpeg
+```
+
 ### Usage
 
 Clone the project first:
@@ -82,10 +89,10 @@ node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID..
 Check the process of websocket server, `ffmpeg` should start sending data to RTMP server.
 
 **Note:**
-If you do nothing in meeting room that time `ffmpeg` may exit with error & will try to reconnect again. Actually I don't have much experience on `ffmpeg` to resolve those problems. Please contribute your experience.
+If presenter do nothing in the meeting room that time `ffmpeg` may exit with error & will try to reconnect again. So, it's recommend from me to keep webcam on. Actually I don't have much experience on `ffmpeg` to resolve those problems. Please contribute your experience.
 
 ### How it will work?
-When you will run the command that time `Chrome` browser will be open in background & visit the link & perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
+When you will run the command that time `Chrome` browser will be open in background & visit the link to perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
 
 **Note: It will use extra CPU to process chrome & ffmpeg.** 
 
