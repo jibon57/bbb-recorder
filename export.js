@@ -24,6 +24,8 @@ var options     = {
     '--no-sandbox',    
     '--shm-size=1gb',
     '--disable-dev-shm-usage',
+    '--start-fullscreen',
+    '--app=https://www.google.com/',
     `--window-size=${width},${height}`,
   ],
 }

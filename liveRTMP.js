@@ -27,7 +27,9 @@ var options     = {
     '--no-sandbox',    
     '--shm-size=1gb',
     '--disable-dev-shm-usage',
-    `--window-size=${width},${height}`,
+    '--start-fullscreen',
+    '--app=https://www.google.com/',
+    `--window-size=${width},${height}`
   ],
 }
 if(platform == "linux"){
@@ -78,6 +80,7 @@ async function main() {
         await page.$eval('.Toastify', element => element.style.display = "none");
         await page.waitForSelector('button[aria-label="Leave audio"]');
         await page.$eval('[class^=actionsbar] > [class^=center]', element => element.style.display = "none");
+        await page.mouse.move(0, 700);
         
         await page.evaluate((x) => {
             console.log("REC_START");
