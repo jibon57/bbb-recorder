@@ -1,10 +1,11 @@
 const puppeteer = require('puppeteer');
 const Xvfb      = require('xvfb');
-var exec = require('child_process').exec;
+const exec = require('child_process').exec;
 const fs = require('fs');
 const os = require('os');
 const homedir = os.homedir();
 const platform = os.platform();
+const config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
 
 var xvfb        = new Xvfb({
     silent: true,
@@ -121,7 +122,7 @@ main()
 function convertAndCopy(filename){
  
     var copyFromPath = homedir + "/Downloads";
-    var copyToPath = "/var/www/bigbluebutton-default/record";
+    var copyToPath = config.copyToPath;
     var onlyfileName = filename.split(".webm")
     var mp4File = onlyfileName[0] + ".mp4"
     var copyFrom = copyFromPath + "/" + filename + ""
@@ -158,7 +159,7 @@ function convertAndCopy(filename){
 function copyOnly(filename){
 
     var copyFrom = homedir + "/Downloads/" + filename;
-    var copyToPath = "/var/www/bigbluebutton-default/record";
+    var copyToPath = config.copyToPath;
     var copyTo = copyToPath + "/" + filename;
 
     if(!fs.existsSync(copyToPath)){
