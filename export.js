@@ -6,6 +6,7 @@ const os = require('os');
 const homedir = os.homedir();
 const platform = os.platform();
 const config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
+const spawn = require('child_process');
 
 var xvfb        = new Xvfb({
     silent: true,
@@ -123,14 +124,10 @@ function convertAndCopy(filename){
 
     console.log(copyTo);
     console.log(copyFrom);
-
-    var cmd = "ffmpeg -y -i '" + copyFrom + "' -c:v libx264 -preset veryfast -movflags faststart -profile:v high -level 4.2 -max_muxing_queue_size 9999 -vf mpdecimate -vsync vfr '" + copyTo + "'";
-
-    console.log("converting using: " + cmd);
-    const { spawn } = require('child_process');
+    
     const ls = spawn('ffmpeg',
-        ['-y',
-            '-i ' + copyFrom,
+        [   '-y',
+            '-i "' + copyFrom + '"',
             '-c:v libx264',
             '-preset veryfast',
             '-movflags faststart',
@@ -138,7 +135,8 @@ function convertAndCopy(filename){
             '-level 4.2',
             '-max_muxing_queue_size 9999',
             '-vf mpdecimate',
-            '-vsync vfr ' + copyTo],
+            '-vsync vfr "' + copyTo + '"'
+        ],
         {
             shell: true
         }
@@ -157,27 +155,13 @@ function convertAndCopy(filename){
         console.log(`child process exited with code ${code}`);
         if(code == 0)
         {
+            console.log("Convertion done to here: " + copyTo)
             fs.unlinkSync(copyFrom);
+            console.log('successfully deleted ' + copyFrom);
         }
        
     });
 
-
-    /* exec(cmd, function(err, stdout, stderr) {
-
-        if (err) console.log('err:\n' + err);
-        //if (stderr) console.log('stderr:\n' + stderr);
-
-        if(!err){
-            console.log("Now deleting " + copyFrom)
-            try {
-              fs.unlinkSync(copyFrom);
-              console.log('successfully deleted ' + copyFrom);
-            } catch (err) {
-              console.log(err)
-            }
-        }
-     }); */
 }
 
 function copyOnly(filename){
