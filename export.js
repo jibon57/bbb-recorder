@@ -5,7 +5,7 @@ const os = require('os');
 const homedir = os.homedir();
 const platform = os.platform();
 const config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
-const spawn = require('child_process');
+const spawn = require('child_process').spawn;
 
 var xvfb        = new Xvfb({
     silent: true,
