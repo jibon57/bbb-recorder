@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 const Xvfb      = require('xvfb');
-const exec = require('child_process').exec;
 const fs = require('fs');
 const os = require('os');
 const homedir = os.homedir();
