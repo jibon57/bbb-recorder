@@ -155,6 +155,11 @@ function convertAndCopy(filename){
 
     ls.on('close', (code) => {
         console.log(`child process exited with code ${code}`);
+        if(code == 0)
+        {
+            fs.unlinkSync(copyFrom);
+        }
+       
     });
 
 
