@@ -127,8 +127,43 @@ function convertAndCopy(filename){
     var cmd = "ffmpeg -y -i '" + copyFrom + "' -c:v libx264 -preset veryfast -movflags faststart -profile:v high -level 4.2 -max_muxing_queue_size 9999 -vf mpdecimate -vsync vfr '" + copyTo + "'";
 
     console.log("converting using: " + cmd);
-    
-    exec(cmd, function(err, stdout, stderr) {
+    const { spawn } = require('child_process');
+    const ls = spawn('ffmpeg',
+        ['-y',
+            '-i ' + copyFrom,
+            '-c:v libx264',
+            '-preset veryfast',
+            '-movflags faststart',
+            '-profile:v high',
+            '-level 4.2',
+            '-max_muxing_queue_size 9999',
+            '-vf mpdecimate',
+            '-vsync vfr ' + copyTo],
+        {
+            shell: true
+        }
+
+    );
+
+    ls.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+
+    ls.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`);
+    });
+
+    ls.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+        if(code == 0)
+        {
+            fs.unlinkSync(copyFrom);
+        }
+       
+    });
+
+
+    /* exec(cmd, function(err, stdout, stderr) {
 
         if (err) console.log('err:\n' + err);
         //if (stderr) console.log('stderr:\n' + stderr);
@@ -142,7 +177,7 @@ function convertAndCopy(filename){
               console.log(err)
             }
         }
-    });
+     }); */
 }
 
 function copyOnly(filename){
