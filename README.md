@@ -2,9 +2,10 @@
 
 Bigbluebutton recordings export to `webm` or `mp4` & live broadcasting. This is an example how I have implemented BBB recordings to distibutable file. 
 
+1. We assume your download folder is `~/Downloads`. If it's not, please edit `export.js`.
 1. Videos will be copy to `/var/www/bigbluebutton-default/record`. You can change value of `copyToPath` from `config.json`.
-3. Can be converted to `mp4`. Default `webm`
-2. Specify bitrate to control quality of the exported video by adjusting `videoBitsPerSecond` property in `background.js`
+1. Can be converted to `mp4`. Default `webm`
+1. Specify bitrate to control quality of the exported video by adjusting `videoBitsPerSecond` property in `background.js`
 
 
 ### Dependencies
