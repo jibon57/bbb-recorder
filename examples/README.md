@@ -1,4 +1,4 @@
-# bbb-recorder
+**Generate Joining Link for live join or RTMP**
 
 Open `index.js` & change the value of `BBBUrl`, `BBBSalt`, & `meetingId`. Now run:
 
