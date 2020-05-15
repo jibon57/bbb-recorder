@@ -1,10 +1,10 @@
 **Generate Joining Link for live join or RTMP**
 
-Open `index.js` & change the value of `BBBUrl`, `BBBSalt`, & `meetingId`. Now run:
+Open `index.js` & change the value of `BBBUrl`, `BBBSalt` & `joinName` (if you want). Now run:
 
 ```javascript
 npm install
-node index.js
+node index.js "meetingId"
 ```
 
 You should get joining link.

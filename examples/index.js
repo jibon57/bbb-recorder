@@ -3,7 +3,6 @@ const jsSHA = require("jssha");
 
 const BBBUrl = "http://test-install.blindsidenetworks.com/bigbluebutton/", 
 BBBSalt = "8cd8ef52e8e101574e400365b55e11a6", 
-meetingId = "jibon_m102",
 joinName = "recorder";
 
 function buildQuery(params){
@@ -25,6 +24,13 @@ function prepareUrl(method, query){
 }
 
 function main() {
+
+	var meetingId = process.argv[2]
+	if(!meetingId){
+		console.log("require meetingId");
+		process.exit(1);
+	}
+
 	var params = {
 		meetingID: meetingId
 	}
