@@ -66,7 +66,7 @@ async function main() {
         if(!duration){
             duration = 0;
         // Check if duration is a natural number
-        }else if(!Number.isInteger(duration) || duration < 0){
+        }else if(!Number.isInteger(Number(duration)) || duration < 0){
             console.warn('Duration must be a natural number!');
             process.exit(1);
         }
@@ -96,6 +96,15 @@ async function main() {
             process.exit(2);
         })
         await page.setBypassCSP(true)
+
+        // Check if recording exists (search "Recording not found" message)
+        var loadMsg = await page.evaluate(() => {
+            return document.getElementById("load-msg").textContent;
+        });
+        if(loadMsg == "Recording not found"){
+            console.warn("Recording not found!");
+            process.exit(1);
+        }
 
         // Get recording duration
         var recDuration = await page.evaluate(() => {
