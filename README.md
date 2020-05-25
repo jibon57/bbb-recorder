@@ -50,10 +50,10 @@ node export.js "https://BBB_HOST/playback/presentation/2.0/playback.html?meeting
 
 You can pass 4 args
 
-1) BBB recording link
-2) Export file name. Should be `.webm` at end
-3) Duration of recording in seconds. Default 10 seconds
-4) Convert to mp4 or not (true for convert to mp4). Default false
+1) BBB recording link (mandatory)
+2) (Optional) Export file name (should be `.webm` at end). You can use "meetingid" (without `.webm`) to set the meeting ID as export name. Default: MEETING_ID.webm 
+3) (Optional) Duration of recording (in seconds). You can set it to 0 use the real duration of recording. Default: real duration of recording
+4) (Optional) Convert to mp4 or not (true for convert to mp4). Default: false
 
 
 ### Live recording
