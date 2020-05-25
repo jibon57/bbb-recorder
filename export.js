@@ -22,7 +22,7 @@ var options     = {
     '--load-extension=' + __dirname,
     '--disable-extensions-except=' + __dirname,
     '--disable-infobars',
-    '--no-sandbox',    
+    '--no-sandbox',
     '--shm-size=1gb',
     '--disable-dev-shm-usage',
     '--start-fullscreen',
@@ -36,7 +36,6 @@ if(platform == "linux"){
 }else if(platform == "darwin"){
     options.executablePath = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 }
-
 
 async function main() {
     try{
@@ -57,32 +56,32 @@ async function main() {
         }
 
         var exportname = process.argv[3];
-        // Use meeting ID as export name if it isn't defined.
-        if(!exportname){
+        // Use meeting ID as export name if it isn't defined or if its value is "meetingid"
+        if(!exportname || exportname == "meetingid"){
             exportname = url.split("=")[1] + '.webm';
         }
-        
+
         var duration = process.argv[4];
         // If duration isn't defined, set it in 0
         if(!duration){
             duration = 0;
         // Check if duration is a natural number
-        } else if(!Number.isInteger(duration) || duration < 0){
+        }else if(!Number.isInteger(duration) || duration < 0){
             console.warn('Duration must be a natural number!');
             process.exit(1);
         }
-        
+
         var convert = process.argv[5]
         if(!convert){
             convert = false
-        } else if(convert !== true || convert !== false){
+        }else if(convert !== "true" && convert !== "false"){
             console.warn("Invalid convert value!");
             process.exit(1);
         }
-        
+
         const browser = await puppeteer.launch(options)
         const pages = await browser.pages()
-        
+
         const page = pages[0]
 
         page.on('console', msg => {
@@ -106,7 +105,7 @@ async function main() {
         if(duration == 0 || duration > recDuration){
             duration = recDuration;
         }
-        
+
         await page.waitForSelector('button[class=acorn-play-button]');
         await page.$eval('#navbar', element => element.style.display = "none");
         await page.$eval('#copyright', element => element.style.display = "none");
@@ -140,7 +139,7 @@ async function main() {
         }else{
             copyOnly(exportname)
         }
-        
+
     }catch(err) {
         console.log(err)
     }
