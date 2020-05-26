@@ -56,8 +56,8 @@ async function main() {
         }
 
         var exportname = process.argv[3];
-        // Use meeting ID as export name if it isn't defined or if its value is "meetingid"
-        if(!exportname || exportname == "meetingid"){
+        // Use meeting ID as export name if it isn't defined or if its value is "MEETING_ID"
+        if(!exportname || exportname == "MEETING_ID"){
             exportname = url.split("=")[1] + '.webm';
         }
 
