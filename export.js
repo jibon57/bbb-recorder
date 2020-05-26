@@ -49,7 +49,7 @@ async function main() {
             process.exit(1);
         }
         // Verify if recording URL has the correct format
-        var urlRegex = new RegExp('^https?:\\/\\/.*\\/playback\\/presentation\\/2\\.0\\/playback\\.html\\?meetingId=[a-z0-9]{40}-[0-9]{13}');
+        var urlRegex = new RegExp('^https?:\\/\\/.*\\/playback\\/presentation\\/2\\.0\\/' + config.playbackFile + '\\?meetingId=[a-z0-9]{40}-[0-9]{13}');
         if(!urlRegex.test(url)){
             console.warn('Invalid recording URL!');
             process.exit(1);
