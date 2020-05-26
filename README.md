@@ -88,7 +88,7 @@ node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID..
 
 Check the process of websocket server, `ffmpeg` should start sending data to RTMP server.
 
-**Note:**
+**Note:** (Workaround [here](https://github.com/jibon57/bbb-recorder/issues/27))
 If presenter do nothing in the meeting room that time `ffmpeg` may exit with error & will try to reconnect again. So, it's recommend from me to keep webcam on. Actually I don't have much experience on `ffmpeg` to resolve those problems. Please contribute your experience.
 
 ### How it will work?
@@ -99,7 +99,7 @@ When you will run the command that time `Chrome` browser will be open in backgro
 
 ## Looking for Bigbluebutton shared hosting?
 
-We are offering cheaper [Bigbluebutton shared hosting](https://www.mynaparrot.com/classroom) or Bigbluebutton installation/configuration/loadbalance service. You can send me email jibon[@]mynaparrot.com
+We are offering cheaper [Bigbluebutton Premium hosting](https://www.mynaparrot.com/classroom/bigbluebuttonservice) or Bigbluebutton installation/configuration/loadbalance service. You can send me email jibon[@]mynaparrot.com
 
 
 ### Thanks to
