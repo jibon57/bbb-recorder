@@ -12,8 +12,10 @@
     "screencast"
   ],
   "dependencies": {
+    "aws-sdk": "^2.720.0",
+    "express": "^4.16.4",
     "puppeteer": "^2.1.1",
-    "xvfb": "^0.3.0",
-    "ws": "^7.2.3"
+    "ws": "^7.2.3",
+    "xvfb": "^0.3.0"
   }
 }

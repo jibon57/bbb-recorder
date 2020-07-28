@@ -43,7 +43,7 @@ npm install --ignore-scripts
 ### Recording export
 
 ```sh
-node export.js "https://BBB_HOST/playback/presentation/2.0/playback.html?meetingId=MEETING_ID" meeting.webm 10 true
+node export.js "https://BBB_HOST/playback/presentation/2.0/playback.html?meetingId=MEETING_ID" meeting.webm 10 true s3
 ```
 
 **Options**
@@ -54,7 +54,7 @@ You can pass 4 args
 2) (Optional) Export file name (should be `.webm` at end). You can use "MEETING_ID" (without `.webm`) to set the meeting ID as export name. Default: MEETING_ID 
 3) (Optional) Duration of recording (in seconds). You can set it to 0 use the real duration of recording. Default: real duration of recording
 4) (Optional) Convert to mp4 or not (true for convert to mp4). Default: false
-
+5) (Optional) Possible Values local - to store in local file system; s3 - To store in S3 complient service like AWS-S3/Digital Ocean Space. To upload in s3 config.json needs to updated with aws config details. Default: local
 
 ### Live recording
 
