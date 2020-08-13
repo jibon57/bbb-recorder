@@ -6,6 +6,7 @@ const homedir = os.homedir();
 const platform = os.platform();
 const config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
 const spawn = require('child_process').spawn;
+const AWS = require('aws-sdk')
 
 var xvfb        = new Xvfb({
     silent: true,
@@ -77,7 +78,18 @@ async function main() {
         }else if(convert !== "true" && convert !== "false"){
             console.warn("Invalid convert value!");
             process.exit(1);
+        }else{
+          convert = eval(convert);
         }
+
+        var storage_type = process.argv[6]
+        if(!storage_type){
+          storage_type = 'local'
+         }else if(storage_type !== "local" && storage_type !== "s3"){
+          console.warn("Invalid storage type only local/s3");
+          process.exit(1);
+        }
+        
 
         const browser = await puppeteer.launch(options)
         const pages = await browser.pages()
@@ -143,11 +155,26 @@ async function main() {
             xvfb.stopSync()
         }
 
-        if(convert){
+        if(storage_type=='local'){
+          if(convert){
             convertAndCopy(exportname)
-        }else{
+          }else{
             copyOnly(exportname)
+          }
+        }else if(storage_type=='s3'){
+          if(convert){
+            convertAndUploadToS3(exportname)
+          }else{
+            uploadToS3(exportname)
+          }
         }
+        
+
+        // if(upload_to_s3){
+        //   uploadToS3(exportname,convert)
+        // }else{
+        //   console.log("Upload is false", upload_to_s3)
+        // }
 
     }catch(err) {
         console.log(err)
@@ -157,7 +184,6 @@ async function main() {
 main()
 
 function convertAndCopy(filename){
- 
     var copyFromPath = homedir + "/Downloads";
     var copyToPath = config.copyToPath;
     var onlyfileName = filename.split(".webm")
@@ -169,8 +195,8 @@ function convertAndCopy(filename){
         fs.mkdirSync(copyToPath);
     }
 
-    console.log(copyTo);
-    console.log(copyFrom);
+    console.log("Copy to:......",copyTo);
+    console.log("Copy FROM:.......",copyFrom);
     
     const ls = spawn('ffmpeg',
         [   '-y',
@@ -211,7 +237,9 @@ function convertAndCopy(filename){
 
 }
 
+
 function copyOnly(filename){
+  console.log("Calling copyOnly", );
 
     var copyFrom = homedir + "/Downloads/" + filename;
     var copyToPath = config.copyToPath;
@@ -231,4 +259,111 @@ function copyOnly(filename){
     } catch (err) {
         console.log(err)
     }
+}
+function convertAndUploadToS3(filename){
+  var copyFromPath = homedir + "/Downloads";
+  var copyToPath = '/tmp';
+  var onlyfileName = filename.split(".webm")
+  var mp4File = onlyfileName[0] + ".mp4"
+  var copyFrom = copyFromPath + "/" + filename + ""
+  var copyTo =  "/tmp/" + mp4File;
+
+  if(!fs.existsSync(copyToPath)){
+      fs.mkdirSync(copyToPath);
+  }
+
+  console.log("Copy to:......",copyTo);
+  console.log("Copy FROM:.......",copyFrom);
+  
+  const ls = spawn('ffmpeg',
+      [   '-y',
+          '-i "' + copyFrom + '"',
+          '-c:v libx264',
+          '-preset veryfast',
+          '-movflags faststart',
+          '-profile:v high',
+          '-level 4.2',
+          '-max_muxing_queue_size 9999',
+          '-vf mpdecimate',
+          '-vsync vfr "' + copyTo + '"'
+      ],
+      {
+          shell: true
+      }
+
+  );
+
+  ls.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+  });
+
+  ls.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+
+  ls.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+      if(code == 0)
+      {
+          const s3 = getS3Client();
+          const fileContent = fs.readFileSync(copyTo);
+          var params = {
+            Bucket: "scout-recordings",
+            Key: mp4File,
+            Body: fileContent,
+            // Metadata:{
+            //   "Content-Type": 'video/mpeg'
+            // }
+          };
+          s3.upload(params, function(err, data) {
+            if (err) {
+              console.log(err, err.stack)
+            }else{
+              console.log(`File uploaded successfully. ${JSON.stringify(data)}`);
+              fs.unlinkSync(copyFrom);
+              fs.unlinkSync(copyTo);
+              console.log('successfully deleted ' + copyFrom);
+            }     
+          });
+          
+      }
+     
+  });
+
+}
+
+function uploadToS3(filename){
+  
+  const s3 = getS3Client();
+  
+  var copyFrom = homedir + "/Downloads/" + filename;
+  const fileContent = fs.readFileSync(copyFrom);
+  var params = {
+    Bucket: "scout-recordings",
+    Key: filename,
+    Body: fileContent,
+    // Metadata:{
+    //   "Content-Type": 'video/webem'
+    // }
+  };
+  s3.upload(params, function(err, data) {
+    if (err) {
+      console.log(err, err.stack)
+    }else{
+      fs.unlinkSync(copyFrom);
+      console.log(`File uploaded successfully. ${JSON.stringify(data)}`);
+    }     
+  });
+ 
+}
+
+function getS3Client(){
+  const spacesEndpoint = new AWS.Endpoint(config.s3Config.endpoint);
+  const s3 = new AWS.S3({
+    endpoint: spacesEndpoint,
+    accessKeyId: config.s3Config.accessKeyId,
+    secretAccessKey: config.s3Config.secretAccessKey,
+    ACL: config.s3Config.ACL
+  });
+  return s3;
 }
