@@ -3,18 +3,15 @@ const WebSocketServer = require('ws').Server;
 const http = require('http');
 const fs = require('fs');
 
-var config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
+const { ffmpegServerPort, rtmpUrl, auth: authConfig } = require('./env');
 
-const server = http.createServer().listen(config.ffmpegServerPort, () => {
+const server = http.createServer().listen(ffmpegServerPort, () => {
   console.log('Listening...');
 });
 
 const wss = new WebSocketServer({
 	server: server
 });
-
-
-const rtmpUrl = config.rtmpUrl;
 
 wss.on('connection', function connection(ws, req) {
 	console.log('connection');
@@ -26,7 +23,7 @@ wss.on('connection', function connection(ws, req) {
 		return;
 	}
 
-	if(auth[1] !== config.auth){
+	if(auth[1] !== authConfig){
 		ws.terminate();
 		return;
 	}
@@ -49,7 +46,7 @@ wss.on('connection', function connection(ws, req) {
 
 	    // remove background noise. You can adjust this values according to your need
 	    '-af', 'highpass=f=200, lowpass=f=3000',
-	    
+
 	    // This option sets the size of this buffer, in packets, for the matching output stream
 	    '-max_muxing_queue_size', '99999',
 
@@ -65,7 +62,7 @@ wss.on('connection', function connection(ws, req) {
 	    // The output RTMP URL.
 	    // For debugging, you could set this to a filename like 'test.flv', and play
 	    // the resulting file with VLC.
-	    rtmpUrl 
+	    rtmpUrl
 	])
 
 	// If FFmpeg stops for any reason, close the WebSocket connection.

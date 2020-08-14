@@ -2,12 +2,12 @@ const puppeteer = require('puppeteer');
 const Xvfb      = require('xvfb');
 var exec = require('child_process').exec;
 const fs = require('fs');
-var config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
+const { ffmpegServer, ffmpegServerPort, auth } = require('./env');
 const os = require('os');
 const homedir = os.homedir();
 const platform = os.platform();
 
-const ffmpegServer = config.ffmpegServer + ":" + config.ffmpegServerPort + "/auth/" + config.auth;
+const ffmpegServer = ffmpegServer + ":" + ffmpegServerPort + "/auth/" + auth;
 
 var xvfb        = new Xvfb({
     silent: true,
@@ -24,7 +24,7 @@ var options     = {
     '--load-extension=' + __dirname,
     '--disable-extensions-except=' + __dirname,
     '--disable-infobars',
-    '--no-sandbox',    
+    '--no-sandbox',
     '--shm-size=1gb',
     '--disable-dev-shm-usage',
     '--start-fullscreen',
@@ -44,15 +44,15 @@ async function main() {
             xvfb.startSync()
         }
         var url = process.argv[2],
-            duration = process.argv[3], 
+            duration = process.argv[3],
             exportname = 'liveMeeting.webm'
 
         if(!url){ url = 'https://www.mynaparrot.com/' }
         //if(!duration){ duration = 10 }
-        
+
         const browser = await puppeteer.launch(options)
         const pages = await browser.pages()
-        
+
         const page = pages[0]
 
         page.on('console', msg => {
@@ -82,7 +82,7 @@ async function main() {
         await page.$eval('[class^=actionsbar] > [class^=center]', element => element.style.display = "none");
         await page.mouse.move(0, 700);
         await page.addStyleTag({content: '@keyframes refresh {0%{ opacity: 1 } 100% { opacity: 0.99 }} body { animation: refresh .01s infinite }'});
-        
+
         await page.evaluate((x) => {
             console.log("REC_START");
             window.postMessage({type: 'REC_START'}, '*')
@@ -109,9 +109,9 @@ async function main() {
         if(platform == "linux"){
             xvfb.stopSync()
         }
-        
+
         fs.unlinkSync(homedir + "/Downloads/liveMeeting.webm");
-        
+
     }catch(err) {
         console.log(err)
     }
