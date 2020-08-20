@@ -12,8 +12,9 @@
     "screencast"
   ],
   "dependencies": {
+    "dotenv": "^8.2.0",
     "puppeteer": "^2.1.1",
-    "xvfb": "^0.3.0",
-    "ws": "^7.2.3"
+    "ws": "^7.2.3",
+    "xvfb": "^0.3.0"
   }
 }
