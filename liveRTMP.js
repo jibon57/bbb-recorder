@@ -7,7 +7,7 @@ const os = require('os');
 const homedir = os.homedir();
 const platform = os.platform();
 
-const ffmpegServer = ffmpegServer + ":" + ffmpegServerPort + "/auth/" + auth;
+const ffmpegHost = ffmpegServer + ":" + ffmpegServerPort + "/auth/" + auth;
 
 var xvfb        = new Xvfb({
     silent: true,
@@ -66,8 +66,8 @@ async function main() {
 
         await page.evaluate((serverAddress) => {
             console.log("FFMPEG_SERVER");
-            window.postMessage({type: 'FFMPEG_SERVER', ffmpegServer: serverAddress}, '*')
-        }, ffmpegServer)
+            window.postMessage({type: 'FFMPEG_SERVER', ffmpegHost: serverAddress}, '*')
+        }, ffmpegHost)
 
         await page.waitForSelector('[aria-label="Listen only"]');
         await page.click('[aria-label="Listen only"]', {waitUntil: 'domcontentloaded'});
@@ -117,4 +117,4 @@ async function main() {
     }
 }
 
-main()
+main();
