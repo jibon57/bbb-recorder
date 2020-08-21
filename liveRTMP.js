@@ -66,7 +66,7 @@ async function main() {
 
         await page.evaluate((serverAddress) => {
             console.log("FFMPEG_SERVER");
-            window.postMessage({type: 'FFMPEG_SERVER', ffmpegHost: serverAddress}, '*')
+            window.postMessage({type: 'FFMPEG_SERVER', ffmpegServer: serverAddress}, '*')
         }, ffmpegHost)
 
         await page.waitForSelector('[aria-label="Listen only"]');
