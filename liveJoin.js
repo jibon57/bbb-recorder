@@ -38,6 +38,8 @@ if(platform == "linux"){
 }
 
 async function main() {
+    let browser, page;
+
     try{
         if(platform == "linux"){
             xvfb.startSync()
@@ -52,8 +54,8 @@ async function main() {
         //if(!duration){ duration = 10 }
         if(!convert){ convert = false }
 
-        const browser = await puppeteer.launch(options)
-        const pages = await browser.pages()
+        browser = await puppeteer.launch(options)
+        pages = await browser.pages()
 
         const page = pages[0]
 
@@ -115,6 +117,10 @@ async function main() {
 
     }catch(err) {
         console.log(err)
+    } finally {
+        page.close && await page.close()
+
+        browser.close && await browser.close()
     }
 }
 
