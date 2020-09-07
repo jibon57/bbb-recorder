@@ -153,7 +153,6 @@ async function main() {
         console.log(err)
     } finally {
         page.close && await page.close()
-
         browser.close && await browser.close()
     }
 }
