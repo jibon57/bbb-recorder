@@ -38,6 +38,8 @@ if(platform == "linux"){
 }
 
 async function main() {
+    let browser, page;
+
     try{
         if(platform == "linux"){
             xvfb.startSync()
@@ -79,10 +81,10 @@ async function main() {
             process.exit(1);
         }
 
-        const browser = await puppeteer.launch(options)
+        browser = await puppeteer.launch(options)
         const pages = await browser.pages()
 
-        const page = pages[0]
+        page = pages[0]
 
         page.on('console', msg => {
             var m = msg.text();
@@ -136,12 +138,6 @@ async function main() {
 
         // Wait for download of webm to complete
         await page.waitForSelector('html.downloadComplete', {timeout: 0})
-        await page.close()
-        await browser.close()
-
-        if(platform == "linux"){
-            xvfb.stopSync()
-        }
 
         if(convert){
             convertAndCopy(exportname)
@@ -151,6 +147,13 @@ async function main() {
 
     }catch(err) {
         console.log(err)
+    } finally {
+        page.close && await page.close()
+        browser.close && await browser.close()
+
+        if(platform == "linux"){
+            xvfb.stopSync()
+        }
     }
 }
 
