@@ -139,10 +139,6 @@ async function main() {
         // Wait for download of webm to complete
         await page.waitForSelector('html.downloadComplete', {timeout: 0})
 
-        if(platform == "linux"){
-            xvfb.stopSync()
-        }
-
         if(convert){
             convertAndCopy(exportname)
         }else{
@@ -154,6 +150,10 @@ async function main() {
     } finally {
         page.close && await page.close()
         browser.close && await browser.close()
+
+        if(platform == "linux"){
+            xvfb.stopSync()
+        }
     }
 }
 
