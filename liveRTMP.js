@@ -53,9 +53,9 @@ async function main() {
         //if(!duration){ duration = 10 }
 
         browser = await puppeteer.launch(options)
-        pages = await browser.pages()
+        const pages = await browser.pages()
 
-        const page = pages[0]
+        page = pages[0]
 
         page.on('console', msg => {
             var m = msg.text();
