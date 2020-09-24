@@ -92,7 +92,7 @@ Check the process of websocket server, `ffmpeg` should start sending data to RTM
 Alternatively, you can stream via a docker container:
 
 ```
-# copy compose file and update the environment params and the meeting join url
+# copy compose file, update the environment params and the meeting join url
 cp docker-compose.yml.livertmp-stream-example docker-compose.yml
 docker-compose build
 docker-compose up
