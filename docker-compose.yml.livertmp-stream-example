@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  bbb-streamer:
+    build: .
+    container_name: bbb-recorder-kenet
+    environment:
+      # RTMP_URL binds the url and stream key
+      - RTMP_URL=rtmp://rtmp-server.com/path/streaming-key-here
+      - FFMPEG_SERVER=ws://127.0.0.1
+      - FFMPEG_SERVER_PORT=4000
+      - AUTH=mZFZN4yc
+      - COPY_TO_PATH=/var/www/bigbluebutton-default/record
+      - PLAYBACK_FILE=playback.html
+      - JOIN_MEETING_URL=https://bbbserver.com/bigbluebutton/api/join?fullName=Broadcast&meetingID=1111&password=password&redirect=true&checksum=3591a048c3a077506d12b637daef166f5b0c4df3
+    command: /bin/sh start_stream.sh
+    volumes:
+      - ./videodata:/video

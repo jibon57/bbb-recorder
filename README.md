@@ -89,6 +89,15 @@ node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID..
 
 Check the process of websocket server, `ffmpeg` should start sending data to RTMP server.
 
+Alternatively, you can stream via a docker container:
+
+```
+# copy compose file, update the environment params and the meeting join url
+cp docker-compose.yml.livertmp-stream-example docker-compose.yml
+docker-compose build
+docker-compose up
+```
+
 ### How it will work?
 When you will run the command that time `Chrome` browser will be open in background & visit the link to perform screen recording. So, if you have set 10 seconds then it will record 10 seconds only. Later it will give you file as webm or mp4.
 
