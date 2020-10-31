@@ -93,9 +93,10 @@ async function main() {
         if(duration > 0){
             await page.waitFor((duration * 1000))
         }else{
-            await page.waitForSelector('[class^=modal] > [class^=content] > button[description="Logs you out of the meeting"]', {
-                timeout: 0
-            });
+            await page.waitForSelector('button[description="Logs you out of the meeting"]', {
+                timeout: 0,
+                visible: true
+            }).then(() => console.log('Found closing selector so closing!!'));
         }
 
         await page.evaluate(filename=>{
