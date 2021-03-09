@@ -54,7 +54,13 @@ async function main() {
         var urlRegexV22 = new RegExp('^https?:\\/\\/.*\\/playback\\/presentation\\/2\\.0\\/' + playbackFile + '\\?meetingId=[a-z0-9]{40}-[0-9]{13}');
         var urlRegexV23 = new RegExp('^https?:\\/\\/.*\\/playback\\/presentation\\/2\\.3\\/[a-z0-9]{40}-[0-9]{13}');
 
-        if (!urlRegexV22.test(url) && !urlRegexV23.test(url)) {
+        var bbbVersionIs23 = false;
+
+        if (urlRegexV22.test(url)) {
+            bbbVersionIs23 = false;
+        } else if (urlRegexV23.test(url)) {
+            bbbVersionIs23 = true;
+        } else {
             console.warn('Invalid recording URL!');
             process.exit(1);
         }
@@ -62,7 +68,7 @@ async function main() {
         var exportname = process.argv[3];
         // Use meeting ID as export name if it isn't defined or if its value is "MEETING_ID"
         if (!exportname || exportname == "MEETING_ID") {
-            exportname = url.split("=")[1] + '.webm';
+            exportname = bbbVersionIs22 ? url.split("=")[1] + '.webm' : url.split('2.3/')[1] + '.webm';
         }
 
         var duration = process.argv[4];
@@ -103,7 +109,11 @@ async function main() {
 
         // Check if recording exists (search "Recording not found" message)
         var loadMsg = await page.evaluate(() => {
-            return document.getElementById("load-msg").textContent;
+            if (document.getElementById("load-msg")) {
+                return document.getElementById("load-msg").textContent;
+            } else {
+                return "";
+            }
         });
         if (loadMsg == "Recording not found") {
             console.warn("Recording not found!");
@@ -112,18 +122,30 @@ async function main() {
 
         // Get recording duration
         var recDuration = await page.evaluate(() => {
-            return document.getElementById("video").duration;
+            return (
+                bbbVersionIs22 ?
+                document.getElementById("video").duration :
+                document.getElementById("vjs_video_3_html5_api").duration
+            );
         });
         // If duration was set to 0 or is greater than recDuration, use recDuration value
         if (duration == 0 || duration > recDuration) {
             duration = recDuration;
         }
 
-        await page.waitForSelector('button[class=acorn-play-button]');
-        await page.$eval('#navbar', element => element.style.display = "none");
-        await page.$eval('#copyright', element => element.style.display = "none");
-        await page.$eval('.acorn-controls', element => element.style.opacity = "0");
-        await page.click('button[class=acorn-play-button]', { waitUntil: 'domcontentloaded' });
+        if (bbbVersionIs22) {
+            await page.waitForSelector('button[class=acorn-play-button]');
+            await page.$eval('#navbar', element => element.style.display = "none");
+            await page.$eval('#copyright', element => element.style.display = "none");
+            await page.$eval('.acorn-controls', element => element.style.opacity = "0");
+            await page.click('button[class=acorn-play-button]', { waitUntil: 'domcontentloaded' });
+        } else if (bbbVersionIs23) {
+            await page.waitForSelector('button[class~="vjs-play-control"]');
+            await page.$eval('.top-bar', element => element.style.display = "none");
+            await page.$eval('.bottom-content', element => element.style.display = "none");
+            await page.$eval('.vjs-control-bar', element => element.style.opacity = "0");
+            await page.click('button[class~="vjs-play-control"]', { waitUntil: 'domcontentloaded' });
+        }
 
         await page.evaluate((x) => {
             console.log("REC_START");
