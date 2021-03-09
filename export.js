@@ -68,7 +68,7 @@ async function main() {
         var exportname = process.argv[3];
         // Use meeting ID as export name if it isn't defined or if its value is "MEETING_ID"
         if (!exportname || exportname == "MEETING_ID") {
-            exportname = bbbVersionIs22 ? url.split("=")[1] + '.webm' : url.split('2.3/')[1] + '.webm';
+            exportname = bbbVersionIs23 ? url.split("=")[1] + '.webm' : url.split('2.3/')[1] + '.webm';
         }
 
         var duration = process.argv[4];
@@ -123,7 +123,7 @@ async function main() {
         // Get recording duration
         var recDuration = await page.evaluate(() => {
             return (
-                bbbVersionIs22 ?
+                bbbVersionIs23 ?
                 document.getElementById("video").duration :
                 document.getElementById("vjs_video_3_html5_api").duration
             );
@@ -133,13 +133,13 @@ async function main() {
             duration = recDuration;
         }
 
-        if (bbbVersionIs22) {
+        if (!bbbVersionIs23) {
             await page.waitForSelector('button[class=acorn-play-button]');
             await page.$eval('#navbar', element => element.style.display = "none");
             await page.$eval('#copyright', element => element.style.display = "none");
             await page.$eval('.acorn-controls', element => element.style.opacity = "0");
             await page.click('button[class=acorn-play-button]', { waitUntil: 'domcontentloaded' });
-        } else if (bbbVersionIs23) {
+        } else {
             await page.waitForSelector('button[class~="vjs-play-control"]');
             await page.$eval('.top-bar', element => element.style.display = "none");
             await page.$eval('.bottom-content', element => element.style.display = "none");
