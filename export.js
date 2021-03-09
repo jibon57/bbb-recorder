@@ -100,7 +100,7 @@ async function main() {
         });
 
         await page._client.send('Emulation.clearDeviceMetricsOverride')
-            // Catch URL unreachable error
+        // Catch URL unreachable error
         await page.goto(url, { waitUntil: 'networkidle2' }).catch(e => {
             console.error('Recording URL unreachable!');
             process.exit(2);
@@ -120,15 +120,19 @@ async function main() {
             process.exit(1);
         }
 
-        // Get recording duration
-        var recDuration = await page.evaluate(() => {
-            return (
-                bbbVersionIs23 ?
-                document.getElementById("vjs_video_3_html5_api").duration :
-                document.getElementById("video").duration
+        var recDuration;
 
-            );
-        });
+        // Get recording duration
+        if (bbbVersionIs23) {
+            recDuration = await page.evaluate(() => {
+                return document.getElementById("vjs_video_3_html5_api").duration
+            });
+        } else {
+            recDuration = await page.evaluate(() => {
+                return document.getElementById("video").duration
+            });
+        }
+
         // If duration was set to 0 or is greater than recDuration, use recDuration value
         if (duration == 0 || duration > recDuration) {
             duration = recDuration;
