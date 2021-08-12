@@ -112,14 +112,14 @@ async function main() {
         // Check if recording exists
         if (bbbVersionIs23) {
             pageMessage = await page.evaluate(() => {
-                if (document.getElementById("load-msg")) {
-                    return document.getElementById("load-msg").textContent;
+                if (document.getElementsByClassName("error-code")[0]) {
+                    return document.getElementsByClassName("error-code")[0].textContent;
                 }
             });
         } else  {
             pageMessage = await page.evaluate(() => {
-                if (document.getElementsByClassName("error-code")[0]) {
-                    return document.getElementsByClassName("error-code")[0].textContent;
+                if (document.getElementById("load-msg")) {
+                    return document.getElementById("load-msg").textContent;
                 }
             });
         }
