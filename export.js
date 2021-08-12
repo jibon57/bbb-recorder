@@ -107,15 +107,24 @@ async function main() {
         })
         await page.setBypassCSP(true)
 
-        // Check if recording exists (search "Recording not found" message)
-        var loadMsg = await page.evaluate(() => {
-            if (document.getElementById("load-msg")) {
-                return document.getElementById("load-msg").textContent;
-            } else {
-                return "";
-            }
-        });
-        if (loadMsg == "Recording not found") {
+        let pageMessage = '';
+
+        // Check if recording exists
+        if (bbbVersionIs23) {
+            pageMessage = await page.evaluate(() => {
+                if (document.getElementById("load-msg")) {
+                    return document.getElementById("load-msg").textContent;
+                }
+            });
+        } else  {
+            pageMessage = await page.evaluate(() => {
+                if (document.getElementsByClassName("error-code")[0]) {
+                    return document.getElementsByClassName("error-code")[0].textContent;
+                }
+            });
+        }
+
+        if (pageMessage === "Recording not found" || pageMessage === "404") {
             console.warn("Recording not found!");
             process.exit(1);
         }
