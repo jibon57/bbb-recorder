@@ -133,6 +133,12 @@ async function main() {
 
         // Get recording duration
         if (bbbVersionIs23) {
+            // for some reason, in the latest versions of BBB, document.getElementById is evaluated BEFORE
+            // the DOM is fully loaded, which results in error
+            // Cannot read properties of null (reading 'duration')
+            // see https://github.com/jibon57/bbb-recorder/issues/100
+            // Quick fix : wait for 2 seconds before reading the duration
+            await page.waitFor(2000);
             recDuration = await page.evaluate(() => {
                 return document.getElementById("vjs_video_3_html5_api").duration
             });
