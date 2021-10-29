@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 VALUE=$(cat /boot/config-$(uname -r) | grep CONFIG_USER_NS)
 

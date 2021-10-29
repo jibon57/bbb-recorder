@@ -16,7 +16,7 @@ Bigbluebutton recordings export to `webm` or `mp4` & live broadcasting. This is 
 
 The latest Google Chrome stable build should be use.
 
-```sh
+```bash
 curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
 echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 apt-get -y update
@@ -24,7 +24,7 @@ apt-get -y install google-chrome-stable
 ```
 
 FFmpeg (if not installed already & have plan for mp4 or RTMP)
-```sh
+```bash
 sudo add-apt-repository ppa:jonathonf/ffmpeg-4
 sudo apt-get update
 sudo apt-get install ffmpeg
@@ -34,7 +34,7 @@ sudo apt-get install ffmpeg
 
 Clone the project first:
 
-```javascript
+```bash
 git clone https://github.com/jibon57/bbb-recorder
 cd bbb-recorder
 npm install --ignore-scripts
@@ -43,7 +43,7 @@ cp .env.example .env
 
 ### Recording export
 
-```sh
+```bash
 node export.js "https://BBB_HOST/playback/presentation/2.0/playback.html?meetingId=MEETING_ID" meeting.webm 10 true
 ```
 
@@ -61,12 +61,12 @@ You can pass 4 args
 
 You can also use `liveJoin.js` to live join meeting as a recorder & perform recording like this:
 
-```sh
+```bash
 node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 0 true
 ```
 Here `0` mean no limit. Recording will auto stop after meeting end or kickout of recorder user. You can also set time limit like this:
 
-```sh
+```bash
 node liveJoin.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." liveRecord.webm 60 true
 ```
 
@@ -78,12 +78,12 @@ Sometime you may want to broadcast meeting via RTMP. To test you can use `ffmpeg
 1) First run websocket server by `node ffmpegServer.js`
 2) Then in another terminal tab
 
-```sh
+```bash
 node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...."
 ```
 You can also set duration otherwise it will close after meeting end or kickout:
 
-```sh
+```bash
 node liveRTMP.js "https://BBB_HOST/bigbluebutton/api/join?meetingId=MEETING_ID...." 20
 ```
 
@@ -91,7 +91,7 @@ Check the process of websocket server, `ffmpeg` should start sending data to RTM
 
 Alternatively, you can stream via a docker container:
 
-```
+```bash
 # copy compose file, update the environment params and the meeting join url
 cp docker-compose.yml.livertmp-stream-example docker-compose.yml
 docker-compose build

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 packages="gconf-service
 libasound2
