@@ -41,6 +41,36 @@ npm install --ignore-scripts
 cp .env.example .env
 ```
 
+### Usage via container
+
+Build the container once.
+
+```bash
+git clone https://github.com/jibon57/bbb-recorder
+cd bbb-recorder
+docker build -t bbb-recorder .
+```
+
+Then prefix the docker run command before the following examples.
+
+```bash
+docker run --detach -v ~/local-output-dir:/output bbb-recorder
+```
+
+In this case we specify `--detach` which means the container will run in background until it finishes.
+
+For the [recording export](#recording-export) example this would be:
+
+```bash
+docker run --detach -v ~/local-output-dir:/output bbb-recorder node export.js "https://BBB_HOST/playback/presentation/2.0/playback.html?meetingId=MEETING_ID" meeting.webm 10 true
+```
+
+You can simplify this task with an alias:
+```bash
+alias bbb='docker run --detach -v ~/local-output-dir:/output bbb-recorder node export.js'
+bbb "https://BBB_HOST/playback/presentation/2.0/playback.html?meetingId=MEETING_ID" meeting.webm 10 true
+```
+
 ### Recording export
 
 ```sh
