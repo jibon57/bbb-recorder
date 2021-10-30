@@ -80,7 +80,7 @@ async function main() {
         await page.$eval('[class^=navbar]', element => element.style.display = "none");
 
         await page.$eval('.Toastify', element => element.style.display = "none");
-        await page.waitForSelector('button[aria-label="Leave audio"]');
+        await page.waitForSelector('button[aria-label="Change/Leave audio"]');
         await page.$eval('[class^=actionsbar] > [class^=center]', element => element.style.display = "none");
         await page.mouse.move(0, 700);
         await page.addStyleTag({content: '@keyframes refresh {0%{ opacity: 1 } 100% { opacity: 0.99 }} body { animation: refresh .01s infinite }'});
