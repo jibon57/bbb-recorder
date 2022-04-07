@@ -308,7 +308,7 @@ function convertAndUploadToS3(filename){
           const s3 = getS3Client();
           const fileContent = fs.readFileSync(copyTo);
           var params = {
-            Bucket: "scout-recordings",
+            Bucket: "amazon-school500117",
             Key: mp4File,
             Body: fileContent,
             // Metadata:{
@@ -339,7 +339,8 @@ function uploadToS3(filename){
   var copyFrom = homedir + "/Downloads/" + filename;
   const fileContent = fs.readFileSync(copyFrom);
   var params = {
-    Bucket: "scout-recordings",
+    // Bucket: "amazon-school500117",
+    Bucket: config.s3Config.bucketName,
     Key: filename,
     Body: fileContent,
     // Metadata:{
