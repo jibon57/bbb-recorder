@@ -1,0 +1,1 @@
+docker run --detach -v ~/local-output-dir:/output bbb-recorder node export.js "https://eco-server15.iran-europe.net/playback/presentation/2.3/d81ebb2c8923336e31fae198ef940c32ecca6cb4-1709664785064" 01.webm 0 true

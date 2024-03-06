@@ -137,8 +137,8 @@ async function main() {
             // the DOM is fully loaded, which results in error
             // Cannot read properties of null (reading 'duration')
             // see https://github.com/jibon57/bbb-recorder/issues/100
-            // Quick fix : wait for 2 seconds before reading the duration
-            await page.waitFor(2000);
+            // Quick fix : wait for 10 seconds before reading the duration
+            await page.waitFor(10000);
             recDuration = await page.evaluate(() => {
                 return document.getElementById("vjs_video_3_html5_api").duration
             });
@@ -152,6 +152,7 @@ async function main() {
         if (duration == 0 || duration > recDuration) {
             duration = recDuration;
         }
+        console.log(duration);
 
         if (!bbbVersionIs23) {
             await page.waitForSelector('button[class=acorn-play-button]');
@@ -183,7 +184,7 @@ async function main() {
         // Wait for download of webm to complete
         await page.waitForSelector('html.downloadComplete', { timeout: 0 })
 
-        if (convert) {
+        if (convert == "true") {
             convertAndCopy(exportname)
         } else {
             copyOnly(exportname)
@@ -204,6 +205,7 @@ async function main() {
 main()
 
 function convertAndCopy(filename) {
+    console.log("Convert And Copy");
 
     var copyFromPath = homedir + "/Downloads";
     var onlyfileName = filename.split(".webm")
@@ -255,6 +257,7 @@ function convertAndCopy(filename) {
 }
 
 function copyOnly(filename) {
+    console.log("Copy Only");
 
     var copyFrom = homedir + "/Downloads/" + filename;
     var copyTo = copyToPath + "/" + filename;
